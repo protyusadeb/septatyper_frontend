@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SeptaTyper | Preview</title>
+<style>
+/* Tailwind-style palette and utilities, hand-written so the file works offline */
+:root{
+  --blue-950:#172554;--blue-900:#1e3a8a;--blue-800:#1e40af;--blue-700:#1d4ed8;--blue-600:#2563eb;--blue-500:#3b82f6;--blue-100:#dbeafe;--blue-50:#eff6ff;
+  --slate-900:#0f172a;--slate-800:#1e293b;--slate-700:#334155;--slate-600:#475569;--slate-500:#64748b;--slate-400:#94a3b8;--slate-300:#cbd5e1;--slate-200:#e2e8f0;--slate-100:#f1f5f9;--slate-50:#f8fafc;
+  --red-700:#b91c1c;--red-600:#dc2626;--red-200:#fecaca;--red-50:#fef2f2;
+  --green-700:#047857;--green-600:#059669;--green-200:#a7f3d0;--green-50:#ecfdf5;
+  --amber-800:#92400e;--amber-600:#d97706;--amber-200:#fde68a;--amber-50:#fffbeb;--gold:#F5B301;
+  --violet-800:#5b21b6;--violet-200:#ddd6fe;--violet-50:#f5f3ff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--slate-50);color:var(--slate-900);font-size:14px;line-height:1.5}
+a{color:var(--blue-800)}
+h1,h2,h3,p,ul{margin:0}
+button{font:inherit;cursor:pointer}
+.hidden{display:none!important}
+.wrap{max-width:1300px;margin:0 auto;padding:24px 16px}
+.wrap-md{max-width:900px;margin:0 auto;padding:28px 16px}
+.stack>*+*{margin-top:20px}
+.stack-sm>*+*{margin-top:12px}
+
+/* demo banner + nav */
+.banner{background:var(--amber-50);border-bottom:1px solid var(--amber-200);color:var(--amber-800);font-size:12px;padding:6px 16px;text-align:center}
+nav.top{position:sticky;top:0;z-index:20;background:var(--blue-950);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+nav.top .in{max-width:1300px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:8px;height:52px}
+.logo{font-weight:700;font-size:17px;letter-spacing:.2px;margin-right:16px;display:flex;align-items:center;gap:8px}
+.logo b{color:var(--gold)}
+nav.top button.link{background:none;border:0;color:#bfdbfe;padding:8px 12px;border-radius:6px;font-size:14px}
+nav.top button.link:hover{background:rgba(255,255,255,.08);color:#fff}
+nav.top button.link[aria-current="page"]{background:rgba(255,255,255,.14);color:#fff;font-weight:600}
+.counter{margin-left:auto;font-size:12px;color:#bfdbfe;background:rgba(255,255,255,.08);padding:4px 10px;border-radius:999px;white-space:nowrap}
+.cta{background:var(--gold);color:var(--blue-950);border:0;font-weight:700;padding:7px 12px;border-radius:6px;font-size:13px;white-space:nowrap}
+.cta:hover{filter:brightness(1.06)}
+@media(max-width:760px){.counter{display:none}nav.top .in{overflow-x:auto}}
+
+/* cards */
+.card{background:#fff;border:1px solid var(--slate-200);border-radius:10px;box-shadow:0 1px 2px rgba(15,23,42,.05)}
+.p4{padding:16px}.p3{padding:12px}
+.grid{display:grid;gap:12px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:860px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.stat .l{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--slate-500)}
+.stat .v{font-size:24px;font-weight:600;color:var(--blue-950)}
+h1.title{font-size:24px;font-weight:600;color:var(--blue-950)}
+h2.sec{font-size:19px;font-weight:600;color:var(--blue-950)}
+h3.sub{font-size:15px;font-weight:600;color:var(--blue-950)}
+.muted{color:var(--slate-600)}.xs{font-size:12px}.faint{color:var(--slate-500)}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue-800)}
+
+/* controls */
+input[type=text],input[type=search],input[type=number],input[type=email],select,textarea{width:100%;border:1px solid var(--slate-300);border-radius:6px;padding:8px 10px;background:#fff;font:inherit;color:inherit}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--blue-500);outline-offset:-1px;border-color:var(--blue-500)}
+label.f{display:block;font-size:13px}
+label.f>span.n{display:block;font-weight:600;color:var(--slate-700);margin-bottom:3px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--slate-300);background:#fff;border-radius:6px;padding:7px 12px;color:var(--slate-700)}
+.btn:hover{background:var(--slate-50)}
+.btn.pri{background:var(--blue-900);border-color:var(--blue-900);color:#fff;font-weight:600}
+.btn.pri:hover{background:var(--blue-800)}
+.btn.ok{background:var(--green-600);border-color:var(--green-600);color:#fff;font-weight:600}
+.btn.bad{border-color:var(--red-200);color:var(--red-700)}
+.seg{display:inline-flex;border:1px solid var(--slate-300);border-radius:6px;overflow:hidden}
+.seg button{border:0;background:#fff;padding:6px 12px;color:var(--slate-600)}
+.seg button[aria-pressed="true"]{background:var(--blue-900);color:#fff}
+
+/* badges */
+.badge{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:1px 9px;font-size:12px;font-weight:600;border:1px solid transparent;white-space:nowrap}
+.b-r{background:var(--red-50);color:var(--red-700);border-color:var(--red-200)}
+.b-s{background:var(--green-50);color:var(--green-700);border-color:var(--green-200)}
+.b-n{background:var(--slate-100);color:var(--slate-600);border-color:var(--slate-300)}
+.b-v{background:var(--violet-50);color:var(--violet-800);border-color:var(--violet-200)}
+.b-a{background:var(--amber-50);color:var(--amber-800);border-color:var(--amber-200)}
+.tick-ok{color:var(--green-600);font-weight:700}.tick-no{color:var(--red-600);font-weight:700}
+.star{width:20px;height:20px;flex:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
+
+/* table */
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--blue-950);color:#dbeafe;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:10px 12px;white-space:nowrap}
+thead th button{background:none;border:0;color:inherit;font:inherit;text-transform:inherit;letter-spacing:inherit;padding:0;display:inline-flex;gap:4px}
+thead th .arrow{color:#93c5fd}
+tbody td{padding:10px 12px;border-bottom:1px solid var(--slate-100);vertical-align:top}
+tbody tr:hover{background:rgba(219,234,254,.35)}
+tbody tr.win{background:rgba(254,243,199,.65);box-shadow:inset 3px 0 0 var(--gold)}
+tbody tr.clickable{cursor:pointer}
+.gid{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:700;color:var(--blue-800);font-size:13px;text-decoration:none}
+.gid:hover{text-decoration:underline}
+.gname{font-size:11px;color:var(--slate-500);max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.empty{padding:36px;text-align:center;color:var(--slate-500)}
+.tfoot{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-top:1px solid var(--slate-200);font-size:13px;color:var(--slate-600);flex-wrap:wrap;gap:8px}
+.legend-star{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--slate-500)}
+
+/* bars */
+.bar{display:grid;grid-template-columns:96px 1fr 28px;gap:8px;align-items:center;font-size:12px;margin:6px 0}
+.bar .t{height:16px;background:var(--slate-100);border-radius:4px;overflow:hidden;display:flex}
+.bar .t i{display:block;height:100%}
+.keys{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:8px;font-size:11px;color:var(--slate-600)}
+.keys span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;background:var(--c)}
+
+/* dropzone */
+.drop{border:2px dashed var(--slate-300);border-radius:10px;padding:26px;text-align:center;background:#fff;transition:.15s}
+.drop.over{border-color:var(--blue-600);background:var(--blue-50)}
+.progress{height:8px;background:var(--slate-200);border-radius:4px;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:var(--blue-700);transition:width .2s}
+.dots{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--blue-600);animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.25}}
+
+/* side panel */
+.panel{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);background:#fff;z-index:40;border-left:1px solid var(--slate-200);box-shadow:-8px 0 24px rgba(15,23,42,.18);overflow-y:auto;padding:20px}
+.scrim{position:fixed;inset:0;background:rgba(15,23,42,.25);z-index:30}
+
+/* theory */
+.mech{border:1px solid;border-radius:10px;padding:14px}
+.mech.s{background:var(--green-50);border-color:var(--green-200)}.mech.r{background:var(--red-50);border-color:var(--red-200)}.mech.v{background:var(--violet-50);border-color:var(--violet-200)}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.eff{border:1px solid var(--slate-200);border-radius:8px;padding:9px 11px}
+.bridge{border:1px solid;border-radius:8px;padding:10px 12px}
+.bridge.ok{background:var(--green-50);border-color:var(--green-200)}.bridge.no{background:var(--red-50);border-color:var(--red-200)}
+.metric-hero{background:var(--blue-950);color:#fff;border:2px solid var(--blue-900);border-radius:10px;padding:16px}
+.tag{display:inline-block;border:1px solid var(--slate-300);border-radius:999px;padding:3px 11px;font-size:12px;color:var(--slate-700);text-decoration:none;background:#fff}
+.tag:hover{border-color:var(--blue-500);color:var(--blue-900)}
+footer.site{border-top:1px solid var(--slate-200);margin-top:32px;padding:16px;text-align:center;font-size:12px;color:var(--slate-500)}
+</style>
+</head>
+<body>
+
+<div class="banner">Preview with illustrative sample data. Genome IDs, names and links are placeholders; nothing here is uploaded or saved.</div>
+
+<nav class="top" aria-label="Main">
+  <div class="in">
+    <div class="logo"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8L12 2.5z" fill="#F5B301"/></svg>Septa<b>Typer</b></div>
+    <button class="link" data-view="browse">Browse</button>
+    <button class="link" data-view="submit">Submit</button>
+    <button class="link" data-view="curator">Curator</button>
+    <button class="link" data-view="theory">Theory</button>
+    <span class="counter">Currently hosting 2,734 genomes</span>
+    <button class="cta" id="cta-upload">Upload genome for septatyping</button>
+  </div>
+</nav>
+
+<!-- ============================== BROWSE ============================== -->
+<main id="view-browse" class="wrap stack">
+  <header>
+    <h1 class="title">Browse isolates</h1>
+    <p class="muted">Filter the repository, compare lab phenotype with BV-BRC and SeptaTyper predictions, and explore the distribution of septatypes. This preview lists 12 sample rows.</p>
+  </header>
+
+  <section class="card p4" aria-label="Filters">
+    <div class="row" style="margin-bottom:10px">
+      <input id="f-q" type="search" placeholder="Search Genome ID, genome name or isolate name…" style="flex:1;min-width:230px">
+      <button class="btn" id="f-reset">Reset</button>
+    </div>
+    <div class="grid g4">
+      <select id="f-sp" aria-label="Species"><option value="">Species: any</option><option>Escherichia coli</option><option>Shigella sonnei</option></select>
+      <select id="f-hab" aria-label="Habitat"><option value="">Habitat: any</option><option>Fecal</option><option>Urine</option></select>
+      <select id="f-lab" aria-label="Lab phenotype"><option value="">Lab phenotype: any</option><option value="R">Lab: Resistant</option><option value="S">Lab: Susceptible</option></select>
+      <select id="f-sep" aria-label="SeptaTyper prediction"><option value="">SeptaTyper: any</option><option value="Cres">SeptaTyper: Cres</option><option value="Csus">SeptaTyper: Csus</option></select>
+    </div>
+    <div class="row" style="margin-top:12px;padding-top:10px;border-top:1px solid var(--slate-100);gap:22px">
+      <label class="row" style="gap:6px"><input type="checkbox" id="f-win"> <span><span style="color:var(--amber-600)">★</span> SeptaTyper correct, BV-BRC wrong or no call</span></label>
+      <label class="row" style="gap:6px"><input type="checkbox" id="f-bvbad"> BV-BRC did not match lab</label>
+    </div>
+  </section>
+
+  <div class="grid g4" id="stats"></div>
+
+  <div class="grid g2">
+    <section class="card p4">
+      <h3 class="sub">Geographic distribution</h3>
+      <p class="xs faint" style="margin-bottom:6px">Isolates by country of isolation (the live site draws a choropleth map)</p>
+      <div id="chart-country"></div>
+    </section>
+    <section class="card p4">
+      <h3 class="sub">Septatype frequency by habitat</h3>
+      <p class="xs faint" style="margin-bottom:6px">Septatypes under the current filters</p>
+      <div id="chart-habitat"></div><div class="keys" id="chart-keys"></div>
+    </section>
+  </div>
+
+  <section class="card" aria-label="Isolate table">
+    <div class="tfoot" style="border-top:0;border-bottom:1px solid var(--slate-200)">
+      <span id="count"></span>
+      <span class="legend-star"><svg class="star" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8L12 2.5z" fill="#F5B301" stroke="#B7860B" stroke-width="1"/></svg>SeptaTyper correct where BV-BRC failed or made no call</span>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr id="thead"></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="tfoot"><span>Rows per page 25 &nbsp;|&nbsp; Page 1 of 1 (sample)</span><span>In the live site this table pages through all 2,734 isolates from the server.</span></div>
+  </section>
+</main>
+
+<!-- ============================== SUBMIT ============================== -->
+<main id="view-submit" class="wrap-md hidden stack">
+  <header>
+    <h1 class="title">Upload a genome for septatyping</h1>
+    <p class="muted">We extract the five codons and the PMQR genes, predict the ciprofloxacin phenotype, and queue your isolate for curator review.</p>
+  </header>
+  <form id="sub-form" class="stack" novalidate>
+    <section class="stack-sm">
+      <h2 class="sub" style="font-size:16px;font-weight:600;color:var(--blue-950)">1. Genome assembly</h2>
+      <div class="drop" id="drop">
+        <div id="drop-empty"><p>Drag and drop a genome assembly here, or</p>
+          <button type="button" class="btn pri" id="drop-btn" style="margin-top:8px">Choose file</button>
+          <p class="xs faint" style="margin-top:8px">Nucleotide FASTA (.fasta, .fa, .fna), plain or .gz, up to 60 MB. In this preview the file stays on your computer.</p></div>
+        <div id="drop-file" class="hidden"><strong id="drop-name"></strong> <span class="faint" id="drop-size"></span> &nbsp;<button type="button" class="btn bad" id="drop-rm" style="padding:2px 8px">Remove</button></div>
+        <input type="file" id="file" accept=".fa,.fas,.fasta,.fna,.gz" style="display:none">
+      </div>
+    </section>
+    <section class="stack-sm">
+      <h2 class="sub" style="font-size:16px;font-weight:600;color:var(--blue-950)">2. Isolate details</h2>
+      <div class="grid g2">
+        <label class="f"><span class="n">Species *</span><select><option>Select species</option><option>Escherichia coli</option><option>Shigella sonnei</option><option>Salmonella enterica subspecies I</option><option>Klebsiella pneumoniae</option></select></label>
+        <label class="f"><span class="n">Habitat *</span><select><option>Select habitat</option><option>Fecal</option><option>Urine</option><option>Respiratory</option><option>Other</option></select></label>
+        <label class="f"><span class="n">Country *</span><input type="text" placeholder="e.g. Bangladesh"><span class="xs faint">Full name or 3-letter ISO code</span></label>
+        <label class="f"><span class="n">Collection year *</span><input type="number" min="1900" max="2026" placeholder="2019"></label>
+        <label class="f"><span class="n">Isolate name</span><input type="text"></label>
+        <label class="f"><span class="n">BV-BRC Genome ID</span><input type="text" placeholder="562.7710"><span class="xs faint">Optional. We fetch the official genome name.</span></label>
+      </div>
+    </section>
+    <section class="stack-sm">
+      <h2 class="sub" style="font-size:16px;font-weight:600;color:var(--blue-950)">3. Laboratory ciprofloxacin result</h2>
+      <div class="row" style="gap:22px"><label class="row" style="gap:6px"><input type="radio" name="ph" checked> <span style="color:var(--red-700)">Resistant</span></label><label class="row" style="gap:6px"><input type="radio" name="ph"> <span style="color:var(--green-700)">Susceptible</span></label></div>
+      <div class="grid g3">
+        <label class="f"><span class="n">MIC (optional)</span><input type="number" step="any" placeholder="e.g. 0.06"></label>
+        <label class="f"><span class="n">Unit</span><select><option>mg/L</option><option>µg/mL</option></select></label>
+        <label class="f"><span class="n">MIC method</span><input type="text" placeholder="Broth microdilution, Etest…"></label>
+      </div>
+    </section>
+    <section class="stack-sm">
+      <h2 class="sub" style="font-size:16px;font-weight:600;color:var(--blue-950)">4. Contact</h2>
+      <div class="grid g2">
+        <label class="f"><span class="n">Email *</span><input type="email" placeholder="you@institute.org"></label>
+        <label class="f"><span class="n">Name</span><input type="text"></label>
+      </div>
+    </section>
+    <div id="sub-progress" class="hidden"><div class="progress"><i id="sub-bar"></i></div><p class="xs faint" id="sub-pct" style="margin-top:4px"></p></div>
+    <div><button type="submit" class="btn pri" style="padding:10px 20px" id="sub-go">Submit genome</button>
+      <p class="xs faint" style="margin-top:8px">Submissions are reviewed by curators before they appear in the database. This is a preview: pressing Submit only simulates the flow.</p></div>
+  </form>
+  <section id="sub-done" class="card p4 hidden stack-sm" style="border-color:var(--green-200)">
+    <h2 class="sec">Thank you. Submission #1042 received (simulated)</h2>
+    <p class="muted">Your genome is staged for review and is not public yet. Bookmark the tracking link to check progress later.</p>
+    <code class="xs" style="display:block;background:var(--slate-100);padding:8px;border-radius:6px;word-break:break-all">/submit/status?id=1042&amp;token=••••••••••••••••</code>
+    <div id="tracker"></div>
+    <button class="btn" id="sub-again">Start another preview submission</button>
+  </section>
+</main>
+
+<!-- ============================== CURATOR ============================== -->
+<main id="view-curator" class="wrap hidden stack">
+  <header class="row" style="justify-content:space-between">
+    <div><h1 class="title">Curation queue</h1><p class="muted">Check the flags, then approve to publish or reject with a reason.</p></div>
+    <button class="btn">Sign out</button>
+  </header>
+  <div class="grid g3" id="cur-cards"></div>
+  <div class="card p3 row" style="gap:18px">
+    <select id="cur-status" style="width:auto"><option value="all">All open</option><option value="rev">Needs review</option><option value="clean">Clean</option></select>
+    <label class="row" style="gap:6px"><input type="checkbox" id="cur-novel"> Novel septatype</label>
+    <label class="row" style="gap:6px"><input type="checkbox" id="cur-mm"> Phenotype mismatch</label>
+  </div>
+  <section class="card"><div class="tablewrap"><table>
+    <thead><tr><th>#</th><th>Submitted</th><th>Isolate</th><th>Species / habitat</th><th>Lab</th><th>SeptaTyper</th><th>Septatype</th><th>Flags</th></tr></thead>
+    <tbody id="cur-body"></tbody></table></div></section>
+</main>
+<div id="scrim" class="scrim hidden"></div>
+<aside id="panel" class="panel hidden" aria-label="Submission detail"></aside>
+
+<!-- ============================== THEORY ============================== -->
+<main id="view-theory" class="wrap-md hidden" style="max-width:1000px">
+  <div class="stack" style="--gap:40px">
+  <header class="stack-sm">
+    <p class="eyebrow">Physicochemical syntax engine</p>
+    <h1 class="title" style="font-size:30px">Context-dependent grammar of ciprofloxacin resistance</h1>
+    <p style="font-size:15px;max-width:760px" class="muted">Resistance does not follow from a single mutation. The effect of a residue depends on its neighbours: the same Glu at ParC-84 is susceptible beside a polar Ser80 and resistant beside a hydrophobic Ile80. SeptaTyper reads GyrA-83, GyrA-87, ParC-80 and ParC-84 as a combination, the tetratype, then adds RecN-346 and two qnr gene families to form the septatype.</p>
+    <div class="row" style="gap:8px"><a class="tag" href="#t-grammar">Two-tier grammar</a><a class="tag" href="#t-mech">Mechanisms</a><a class="tag" href="#t-explore">Explorer</a><a class="tag" href="#t-valid">Validation</a></div>
+  </header>
+
+  <section id="t-grammar" class="stack-sm" style="margin-top:36px">
+    <h2 class="sec">The two-tier grammar</h2>
+    <div class="grid g2">
+      <div class="card p4"><div class="eyebrow">Tier 1</div><h3 class="sub">Tetratype baseline</h3><p class="muted" style="margin-top:4px">Each position casts a vote toward resistance when it loses its native hydroxyl or negative charge. Two or more votes give a resistant baseline, none a susceptible one, and a single vote is settled by hydrophobicity.</p></div>
+      <div class="card p4"><div class="eyebrow">Tier 2</div><h3 class="sub">Septatype overrides</h3><p class="muted" style="margin-top:4px">qnr genes, selected RecN-346 states and species-specific patterns can overturn a susceptible baseline. They never turn a resistant baseline back into a susceptible one.</p></div>
+    </div>
+    <div class="card tablewrap"><table>
+      <thead><tr><th>Position</th><th>Susceptible state</th><th>Resistant state</th></tr></thead>
+      <tbody>
+        <tr><td><b>GyrA-83</b></td><td style="color:var(--green-700)">Polar residue with -OH group (Ser)</td><td style="color:var(--red-700)">Hydrophobic residue (Ile, Leu, Phe)</td></tr>
+        <tr><td><b>GyrA-87</b></td><td style="color:var(--green-700)">Negatively charged residue (Asp)</td><td style="color:var(--red-700)">Polar or uncharged residue (Asn, Gly)</td></tr>
+        <tr><td><b>ParC-80</b></td><td style="color:var(--green-700)">Polar residue with -OH group (Ser)</td><td style="color:var(--red-700)">Hydrophobic residue (Ile)</td></tr>
+        <tr><td><b>ParC-84</b></td><td style="color:var(--green-700)">Negatively charged residue (Glu)</td><td style="color:var(--red-700)">Uncharged residue, or Glu next to a hydrophobic ParC-80</td></tr>
+      </tbody></table></div>
+  </section>
+
+  <section id="t-mech" class="stack-sm" style="margin-top:36px">
+    <h2 class="sec">Mechanisms</h2>
+    <div class="grid g3">
+      <article class="mech s"><h3 class="sub" style="color:#065f46">Susceptible state</h3><p class="mono xs faint">e.g. S-D-S-E</p><p class="muted" style="margin-top:6px">The polar hydroxyl (-OH) groups of GyrA-83 (Ser) and ParC-80 (Ser), combined with the negative charges of GyrA-87 (Asp) and ParC-84 (Glu), maintain the local electrostatic environment. This facilitates the water-metal ion bridge that coordinates the Mg²⁺ ion, allowing ciprofloxacin to bind successfully.</p></article>
+      <article class="mech r"><h3 class="sub" style="color:#7f1d1d">Hydrophobic disruption</h3><p class="mono xs faint">e.g. I-N-I-E, L-G-I-E</p><p class="muted" style="margin-top:6px">Replacing Ser83 or Ser80 with hydrophobic residues (Ile, Leu, Phe) abolishes native hydrogen bonding. Replacing Asp87 with charge-neutral amino acids (Asn, Gly) alters the electrostatic environment, preventing drug binding.</p></article>
+      <article class="mech v"><h3 class="sub" style="color:var(--violet-800)">Electrostatic reversal</h3><p class="mono xs faint">e.g. F-N-S-K</p><p class="muted" style="margin-top:6px">Replacing Glu84 with Lys84 introduces a positive charge. This reverses the local electrostatic environment surrounding the Mg²⁺ ion, disrupting the coordination necessary for the drug-target complex despite maintaining ParC-80's hydrogen-bonding capacity.</p></article>
+    </div>
+  </section>
+
+  <section class="stack-sm" style="margin-top:36px">
+    <h2 class="sec">Combined mean hydrophobicity</h2>
+    <p class="muted" style="max-width:760px">For each of GyrA and ParC, the mean hydrophobicity of the quinolone resistance-determining region helix is calculated on the Eisenberg consensus scale, and the combined value ⟨H⟩ GyrA-ParC is the average of the two. Helices carrying susceptible markers fall between 0.27 and 0.32, and helices carrying resistant markers between 0.40 and 0.48.</p>
+    <svg viewBox="0 0 600 150" style="width:100%;max-width:640px" role="img" aria-label="Hydrophobicity ranges">
+      <line x1="40" y1="110" x2="560" y2="110" stroke="#94a3b8"/>
+      <g font-size="11" fill="#475569" text-anchor="middle"><text x="40" y="130">0.2</text><text x="193" y="130">0.3</text><text x="347" y="130">0.4</text><text x="500" y="130">0.5</text></g>
+      <rect x="147" y="30" width="77" height="20" rx="4" fill="#2e9e6b" opacity=".85"/><text x="141" y="45" font-size="12" text-anchor="end" fill="#334155">Csus markers</text><text x="230" y="45" font-size="11" fill="#475569">0.27 to 0.32</text>
+      <rect x="317" y="62" width="123" height="20" rx="4" fill="#c0392b" opacity=".85"/><text x="311" y="77" font-size="12" text-anchor="end" fill="#334155">Cres markers</text><text x="446" y="77" font-size="11" fill="#475569">0.40 to 0.48</text>
+      <circle cx="187" cy="100" r="5" fill="#7b3fa0"/><text x="196" y="96" font-size="11" fill="#7b3fa0">F-N-S-K 0.297 (resistant despite a susceptible-range value)</text>
+    </svg>
+  </section>
+
+  <section id="t-explore" class="stack-sm" style="margin-top:36px">
+    <h2 class="sec">Interactive structural explorer</h2>
+    <p class="muted" style="max-width:760px">Choose a tetratype to see which positions lose their hydrogen bond, lose their negative charge, or reverse it, and how that bears on the Mg²⁺ water bridge. The live site shows the Mol* 3D structures (PDB 2XCT for GyrA, 3FOF for ParC); this preview draws a schematic instead.</p>
+    <div class="row" id="scen-btns"></div>
+    <div class="grid" style="grid-template-columns:minmax(0,3fr) minmax(0,2fr)" id="scen-grid">
+      <div class="card p3" style="min-height:380px"><div id="scen-svg"></div><div class="keys" style="justify-content:center" id="scen-legend"></div></div>
+      <div id="scen-panel" class="stack-sm"></div>
+    </div>
+  </section>
+
+  <section id="t-valid" class="stack-sm" style="margin-top:36px">
+    <h2 class="sec">Performance validation</h2>
+    <div class="grid g4">
+      <div class="metric-hero" style="grid-column:span 1"><div class="xs" style="color:#bfdbfe;text-transform:uppercase;letter-spacing:.06em">Computational concordance</div><div style="font-size:36px;font-weight:600">&gt;97%</div><div style="font-size:12px;color:#dbeafe">97.3% of 2,734 isolates match the lab phenotype</div></div>
+      <div class="card p4 stat"><div class="l">Sensitivity</div><div class="v" style="color:var(--red-700)">98.9%</div><div class="xs faint">resistant isolates called Cres</div></div>
+      <div class="card p4 stat"><div class="l">Specificity</div><div class="v" style="color:var(--green-700)">94.6%</div><div class="xs faint">susceptible isolates called Csus</div></div>
+      <div class="card p4 stat"><div class="l">Method</div><div class="v" style="font-size:18px;padding-top:6px">Per isolate</div><div class="xs faint">rule-based, not a frequency lookup</div></div>
+    </div>
+    <div class="card p4"><h3 class="sub" style="margin-bottom:8px">Concordance by species</h3><div id="sp-bars"></div>
+      <p class="xs faint" style="margin-top:8px">Scored on the founding dataset. The grammar was developed with this dataset in view, so this is concordance rather than independent validation.</p></div>
+    <div class="bridge" style="background:var(--amber-50);border-color:var(--amber-200)"><b style="color:var(--amber-800)">Expected variation: qnr-positive isolates that test susceptible.</b> <span class="muted">A qnr gene is detected from its sequence, so the call says nothing about how strongly it is expressed. Such cases are attributed to the broader genetic context, including regulatory regions and compensatory mutations; low or silenced expression, which genome sequence cannot show, may also contribute.</span></div>
+  </section>
+  </div>
+</main>
+
+<footer class="site">SeptaTyper · preview build · sample data only</footer>
+
+<script>
+(function(){
+"use strict";
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const STAR='<svg class="star" viewBox="0 0 24 24" role="img" aria-label="SeptaTyper correct, BV-BRC wrong or no call"><title>SeptaTyper predicted the lab phenotype correctly; BV-BRC failed or made no call</title><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8L12 2.5z" fill="#F5B301" stroke="#B7860B" stroke-width="1" stroke-linejoin="round"/></svg>';
+
+/* ---------------- navigation ---------------- */
+const VIEWS=["browse","submit","curator","theory"];
+function show(v){
+  if(!VIEWS.includes(v)) v="browse";
+  VIEWS.forEach(n=>{$("#view-"+n).classList.toggle("hidden",n!==v)});
+  $$("nav.top button.link").forEach(b=>{ if(b.dataset.view===v) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current"); });
+  closePanel(); window.scrollTo(0,0);
+  if(location.hash!=="#"+v){ try{ history.replaceState(null,"","#"+v); }catch(e){ location.hash=v; } }
+}
+$$("nav.top button.link").forEach(b=>b.addEventListener("click",()=>show(b.dataset.view)));
+$("#cta-upload").addEventListener("click",()=>show("submit"));
+window.addEventListener("hashchange",()=>show(location.hash.slice(1)));
+
+/* ---------------- sample data (illustrative) ---------------- */
+// lab / bv: R = resistant, S = susceptible, NC = no call.  sep: SeptaTyper call.
+const ROWS=[
+ {id:"562.90001",name:"Escherichia coli strain DEMO-001",sp:"Escherichia coli",hab:"Urine",st:"ST131",sept:"I-N-I-E-L-0-0",year:"2016",country:"Bangladesh",lab:"R",bv:"NC",sep:"Cres"},
+ {id:"562.90002",name:"Escherichia coli strain DEMO-002",sp:"Escherichia coli",hab:"Fecal",st:"ST10",sept:"S-D-S-E-L-0-0",year:"2014",country:"India",lab:"S",bv:"S",sep:"Csus"},
+ {id:"562.90003",name:"Escherichia coli strain DEMO-003",sp:"Escherichia coli",hab:"Urine",st:"ST131",sept:"L-D-I-E-L-0-0",year:"2018",country:"USA",lab:"R",bv:"S",sep:"Cres"},
+ {id:"562.90004",name:"Escherichia coli strain DEMO-004",sp:"Escherichia coli",hab:"Fecal",st:"ST69",sept:"S-D-S-E-L-0-0",year:"2012",country:"Germany",lab:"S",bv:"NC",sep:"Csus"},
+ {id:"562.90005",name:"Escherichia coli strain DEMO-005",sp:"Escherichia coli",hab:"Urine",st:"ST1193",sept:"I-D-I-E-L-0-0",year:"2019",country:"Bangladesh",lab:"R",bv:"R",sep:"Cres"},
+ {id:"562.90006",name:"Escherichia coli strain DEMO-006",sp:"Escherichia coli",hab:"Fecal",st:"ST44",sept:"S-D-S-E-L-0-1",year:"2017",country:"India",lab:"S",bv:"S",sep:"Cres"},
+ {id:"624.90001",name:"Shigella sonnei strain DEMO-007",sp:"Shigella sonnei",hab:"Fecal",st:"ST152",sept:"S-D-S-E-F-0-1",year:"2015",country:"Bangladesh",lab:"R",bv:"S",sep:"Cres"},
+ {id:"624.90002",name:"Shigella sonnei strain DEMO-008",sp:"Shigella sonnei",hab:"Fecal",st:"ST152",sept:"L-D-S-E-L-0-0",year:"2018",country:"Vietnam",lab:"R",bv:"S",sep:"Cres"},
+ {id:"624.90003",name:"Shigella sonnei strain DEMO-009",sp:"Shigella sonnei",hab:"Fecal",st:"ST152",sept:"S-D-S-E-L-0-0",year:"2013",country:"India",lab:"S",bv:"S",sep:"Csus"},
+ {id:"624.90004",name:"Shigella sonnei strain DEMO-010",sp:"Shigella sonnei",hab:"Fecal",st:"ST152",sept:"L-G-I-E-L-0-0",year:"2020",country:"Bangladesh",lab:"R",bv:"R",sep:"Cres"},
+ {id:"624.90005",name:"Shigella sonnei strain DEMO-011",sp:"Shigella sonnei",hab:"Fecal",st:"ST152",sept:"S-Y-S-E-L-0-0",year:"2019",country:"Vietnam",lab:"R",bv:"NC",sep:"Cres"},
+ {id:"624.90006",name:"Shigella sonnei strain DEMO-012",sp:"Shigella sonnei",hab:"Fecal",st:"ST152",sept:"S-D-S-E-L-0-1",year:"2016",country:"India",lab:"R",bv:"R",sep:"Cres"}
+];
+ROWS.forEach(r=>{
+  r.sepOk=(r.sep==="Cres")===(r.lab==="R");
+  r.bvOk=r.bv==="NC"?false:(r.bv==="R")===(r.lab==="R");
+  r.win=r.sepOk&&!r.bvOk;
+});
+
+/* ---------------- browse table ---------------- */
+const COLS=[["id","Genome ID / Name"],["sp","Species"],["hab","Habitat"],["st","ST"],["sept","Septatype"],["year","Year"],["country","Country"],["lab","Lab phenotype"],["bv","BV-BRC computational"],["sep","SeptaTyper"]];
+let sortKey="id",sortDir=1;
+const badge=(v)=>v==="R"?'<span class="badge b-r">Resistant</span>':v==="S"?'<span class="badge b-s">Susceptible</span>':'<span class="badge b-n">No call</span>';
+const tick=(ok)=>ok?'<span class="tick-ok" title="Matches lab phenotype">✓</span>':'<span class="tick-no" title="Does not match lab phenotype">✗</span>';
+function filtered(){
+  const q=$("#f-q").value.trim().toLowerCase(), sp=$("#f-sp").value, hab=$("#f-hab").value, lab=$("#f-lab").value, sep=$("#f-sep").value;
+  const win=$("#f-win").checked, bvbad=$("#f-bvbad").checked;
+  return ROWS.filter(r=>(!q||(r.id+" "+r.name).toLowerCase().includes(q))&&(!sp||r.sp===sp)&&(!hab||r.hab===hab)&&(!lab||r.lab===lab)&&(!sep||r.sep===sep)&&(!win||r.win)&&(!bvbad||!r.bvOk));
+}
+function renderHead(){
+  $("#thead").innerHTML=COLS.map(([k,l])=>`<th aria-sort="${sortKey===k?(sortDir>0?"ascending":"descending"):"none"}"><button type="button" data-k="${k}">${l}<span class="arrow">${sortKey===k?(sortDir>0?"▲":"▼"):""}</span></button></th>`).join("");
+  $$("#thead button").forEach(b=>b.addEventListener("click",()=>{ if(sortKey===b.dataset.k) sortDir*=-1; else {sortKey=b.dataset.k;sortDir=1;} renderBrowse(); }));
+}
+function renderBrowse(){
+  renderHead();
+  const rows=filtered().sort((a,b)=>(a[sortKey]>b[sortKey]?1:a[sortKey]<b[sortKey]?-1:0)*sortDir);
+  $("#count").innerHTML=`<strong>${rows.length}</strong> sample isolates match`;
+  $("#tbody").innerHTML=rows.length?rows.map(r=>`<tr class="${r.win?"win":""}">
+    <td><div style="min-width:210px"><a class="gid" href="#browse" title="Placeholder ID. The live site links to the BV-BRC genome page." onclick="return false">${r.id}</a><div class="gname" title="${r.name}">${r.name}</div></div></td>
+    <td><i>${r.sp}</i></td><td>${r.hab}</td><td>${r.st}</td><td class="mono" style="font-size:12px">${r.sept}</td><td>${r.year}</td><td>${r.country}</td>
+    <td>${badge(r.lab)}</td>
+    <td>${r.bv==="NC"?badge("NC"):`<span class="row" style="gap:6px">${badge(r.bv)}${tick(r.bvOk)}</span>`}</td>
+    <td><span class="row" style="gap:6px"><span class="badge ${r.sep==="Cres"?"b-r":"b-s"}">${r.sep}</span>${tick(r.sepOk)}${r.win?STAR:""}</span></td></tr>`).join(""):`<tr><td colspan="10" class="empty">No isolates match these filters.</td></tr>`;
+  // stats
+  const n=rows.length, sOk=rows.filter(r=>r.sepOk).length, bvHave=rows.filter(r=>r.bv!=="NC"), bOk=bvHave.filter(r=>r.bvOk).length, w=rows.filter(r=>r.win).length;
+  const pct=(a,b)=>b?Math.round(100*a/b)+"%":"n/a";
+  $("#stats").innerHTML=[["Matching isolates",n],["SeptaTyper accuracy",pct(sOk,n)],["BV-BRC accuracy",pct(bOk,bvHave.length)],["SeptaTyper-only correct",w]].map(([l,v])=>`<div class="card p3 stat"><div class="l">${l}</div><div class="v">${v}</div></div>`).join("")+"";
+  // charts
+  const byC={}; rows.forEach(r=>{(byC[r.country]=byC[r.country]||{n:0,res:0}).n++; if(r.lab==="R") byC[r.country].res++;});
+  const maxC=Math.max(1,...Object.values(byC).map(x=>x.n));
+  $("#chart-country").innerHTML=Object.entries(byC).sort((a,b)=>b[1].n-a[1].n).map(([c,x])=>`<div class="bar"><span>${c}</span><span class="t"><i style="width:${100*x.res/maxC}%;background:#c0392b"></i><i style="width:${100*(x.n-x.res)/maxC}%;background:#2e9e6b"></i></span><b>${x.n}</b></div>`).join("")+(rows.length?'<div class="keys"><span style="--c:#c0392b">Resistant</span><span style="--c:#2e9e6b">Susceptible</span></div>':'<div class="empty">No data</div>');
+  const septs=[...new Set(rows.map(r=>r.sept))]; const pal=["#0b2a5b","#1f5fa8","#4a90d9","#8fbcea","#2e9e6b","#c0392b","#e08e45","#7b6cb0","#b8c0cc"];
+  const habs=[...new Set(rows.map(r=>r.hab))];
+  $("#chart-habitat").innerHTML=habs.map(h=>{const hr=rows.filter(r=>r.hab===h);return `<div class="bar"><span>${h}</span><span class="t">${septs.map((s,i)=>{const k=hr.filter(r=>r.sept===s).length;return k?`<i title="${s}: ${k}" style="width:${100*k/Math.max(1,rows.length)*1.8}%;background:${pal[i%pal.length]}"></i>`:""}).join("")}</span><b>${hr.length}</b></div>`}).join("")||'<div class="empty">No data</div>';
+  $("#chart-keys").innerHTML=septs.map((s,i)=>`<span style="--c:${pal[i%pal.length]}">${s}</span>`).join("");
+}
+["#f-q","#f-sp","#f-hab","#f-lab","#f-sep","#f-win","#f-bvbad"].forEach(s=>$(s).addEventListener("input",renderBrowse));
+$("#f-reset").addEventListener("click",()=>{["#f-q","#f-sp","#f-hab","#f-lab","#f-sep"].forEach(s=>$(s).value="");$("#f-win").checked=false;$("#f-bvbad").checked=false;renderBrowse();});
+
+/* ---------------- submit (simulated) ---------------- */
+const fileIn=$("#file"), drop=$("#drop");
+function setFile(f){ if(!f){$("#drop-empty").classList.remove("hidden");$("#drop-file").classList.add("hidden");return;}
+  $("#drop-name").textContent=f.name; $("#drop-size").textContent=(f.size>=1048576?(f.size/1048576).toFixed(1)+" MB":Math.ceil(f.size/1024)+" KB");
+  $("#drop-empty").classList.add("hidden"); $("#drop-file").classList.remove("hidden"); }
+$("#drop-btn").addEventListener("click",()=>fileIn.click());
+fileIn.addEventListener("change",()=>setFile(fileIn.files[0]));
+$("#drop-rm").addEventListener("click",()=>{fileIn.value="";setFile(null);});
+["dragenter","dragover"].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.add("over");}));
+["dragleave","drop"].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.remove("over");}));
+drop.addEventListener("drop",ev=>{const f=ev.dataTransfer&&ev.dataTransfer.files[0]; if(f) setFile(f);});
+$("#sub-form").addEventListener("submit",ev=>{
+  ev.preventDefault(); $("#sub-progress").classList.remove("hidden"); $("#sub-go").disabled=true;
+  let p=0; const t=setInterval(()=>{ p=Math.min(100,p+9+Math.random()*9); $("#sub-bar").style.width=p+"%"; $("#sub-pct").textContent=p>=100?"Processing upload…":"Uploading "+Math.round(p)+"%";
+    if(p>=100){clearInterval(t);setTimeout(done,500);} },140);
+});
+function done(){
+  $("#sub-form").classList.add("hidden"); $("#sub-done").classList.remove("hidden");
+  $("#tracker").innerHTML='<div class="row" style="gap:8px"><span class="dots"></span><strong>Analysing your genome…</strong></div>';
+  setTimeout(()=>{ $("#tracker").innerHTML=`<div class="stack-sm"><strong>Received. Waiting for curator review</strong>
+    <dl style="display:grid;grid-template-columns:auto 1fr;gap:3px 16px;background:var(--slate-50);padding:10px;border-radius:8px;max-width:420px;margin:0">
+      <dt class="faint">Septatype</dt><dd class="mono" style="margin:0">S-D-S-E-L-0-0</dd><dt class="faint">SeptaTyper prediction</dt><dd style="margin:0">Csus</dd><dt class="faint">Your phenotype</dt><dd style="margin:0">Resistant</dd></dl>
+    <div><span class="muted">A curator will look at these points before publishing:</span><div class="row" style="gap:6px;margin-top:4px"><span class="badge b-r">Predicted phenotype conflicts with the submitted phenotype</span></div></div></div>`; },2200);
+}
+$("#sub-again").addEventListener("click",()=>{ $("#sub-done").classList.add("hidden"); $("#sub-form").classList.remove("hidden"); $("#sub-progress").classList.add("hidden"); $("#sub-bar").style.width="0"; $("#sub-go").disabled=false; });
+
+/* ---------------- curator (simulated) ---------------- */
+const SUBS=[
+ {id:1041,date:"9 Oct 2026",iso:"BD-U-0417",sp:"Escherichia coli",hab:"Urine",ctry:"Bangladesh",yr:2022,lab:"R",sep:"Cres",sept:"I-N-I-E-L-0-0",flags:[],bv:"562.91001 (fetched)",cod:[["GyrA-83","ATC","I"],["GyrA-87","AAC","N"],["ParC-80","ATC","I"],["ParC-84","GAA","E"],["RecN-346","CTG","L"]],pm:"qnrB2 absent, qnrS1 absent"},
+ {id:1042,date:"10 Oct 2026",iso:"DH-F-2209",sp:"Shigella sonnei",hab:"Fecal",ctry:"Bangladesh",yr:2021,lab:"R",sep:"Csus",sept:"S-D-S-E-L-0-0",flags:["mm"],bv:"Not provided",cod:[["GyrA-83","TCG","S"],["GyrA-87","GAC","D"],["ParC-80","AGC","S"],["ParC-84","GAA","E"],["RecN-346","CTG","L"]],pm:"qnrB2 absent, qnrS1 absent"},
+ {id:1043,date:"10 Oct 2026",iso:"VN-S-118",sp:"Escherichia coli",hab:"Fecal",ctry:"Vietnam",yr:2020,lab:"R",sep:"Cres",sept:"L-D-I-V-L-0-0",flags:["nov"],bv:"562.91007 (fetched)",cod:[["GyrA-83","TTG","L"],["GyrA-87","GAC","D"],["ParC-80","ATC","I"],["ParC-84","GTA","V"],["RecN-346","CTG","L"]],pm:"qnrB2 absent, qnrS1 absent"},
+ {id:1044,date:"11 Oct 2026",iso:"IN-U-5530",sp:"Escherichia coli",hab:"Urine",ctry:"India",yr:2023,lab:"S",sep:"Csus",sept:"S-D-S-E-L-0-0",flags:[],bv:"Not provided",cod:[["GyrA-83","TCG","S"],["GyrA-87","GAC","D"],["ParC-80","AGC","S"],["ParC-84","GAA","E"],["RecN-346","CTG","L"]],pm:"qnrB2 absent, qnrS1 absent"}
+];
+const FLAG={mm:["Phenotype mismatch","b-r"],nov:["Novel septatype","b-v"]};
+function renderCurator(){
+  const st=$("#cur-status").value, nov=$("#cur-novel").checked, mm=$("#cur-mm").checked;
+  const rows=SUBS.filter(s=>(st==="all"||(st==="rev"?s.flags.length:!s.flags.length))&&(!nov||s.flags.includes("nov"))&&(!mm||s.flags.includes("mm")));
+  $("#cur-cards").innerHTML=[["Needs review",SUBS.filter(s=>s.flags.length).length,"var(--amber-600)"],["Clean, awaiting approval",SUBS.filter(s=>!s.flags.length).length,"var(--blue-950)"],["Analysis failed",0,"var(--red-700)"]].map(([l,v,c])=>`<div class="card p3 stat"><div class="l">${l}</div><div class="v" style="color:${c}">${v}</div></div>`).join("");
+  $("#cur-body").innerHTML=rows.length?rows.map(s=>`<tr class="clickable" data-id="${s.id}" style="${s.flags.length?"box-shadow:inset 3px 0 0 #d97706":""}"><td class="mono">${s.id}</td><td>${s.date}</td><td>${s.iso}</td><td><i>${s.sp}</i><div class="xs faint">${s.hab}, ${s.ctry} ${s.yr}</div></td><td>${badge(s.lab)}</td><td><b style="color:${s.sep==="Cres"?"var(--red-700)":"var(--green-700)"}">${s.sep}</b></td><td class="mono" style="font-size:12px">${s.sept}</td><td><div class="row" style="gap:4px">${s.flags.map(f=>`<span class="badge ${FLAG[f][1]}">${FLAG[f][0]}</span>`).join("")}</div></td></tr>`).join(""):`<tr><td colspan="8" class="empty">Nothing waiting for review.</td></tr>`;
+  $$("#cur-body tr.clickable").forEach(tr=>tr.addEventListener("click",()=>openPanel(+tr.dataset.id)));
+}
+["#cur-status","#cur-novel","#cur-mm"].forEach(s=>$(s).addEventListener("input",renderCurator));
+function openPanel(id){
+  const s=SUBS.find(x=>x.id===id); if(!s) return;
+  $("#panel").innerHTML=`<div class="row" style="justify-content:space-between;margin-bottom:12px"><h2 class="sec">Submission #${s.id}</h2><button class="btn" id="p-close" aria-label="Close">✕</button></div>
+  <div class="stack-sm">
+   <div class="row" style="gap:6px">${s.flags.map(f=>`<span class="badge ${FLAG[f][1]}">${FLAG[f][0]}</span>`).join("")||'<span class="badge b-s">No flags</span>'}</div>
+   <dl style="display:grid;grid-template-columns:9rem 1fr;gap:3px 12px;margin:0">
+     <dt class="faint">Isolate</dt><dd style="margin:0">${s.iso}</dd><dt class="faint">Declared species</dt><dd style="margin:0"><i>${s.sp}</i></dd>
+     <dt class="faint">Habitat / Country</dt><dd style="margin:0">${s.hab} / ${s.ctry}</dd><dt class="faint">Year</dt><dd style="margin:0">${s.yr}</dd>
+     <dt class="faint">Lab phenotype</dt><dd style="margin:0">${badge(s.lab)}</dd><dt class="faint">BV-BRC</dt><dd style="margin:0">${s.bv}</dd></dl>
+   <div style="background:var(--slate-50);padding:10px;border-radius:8px"><span class="mono" style="font-weight:700;font-size:15px">${s.sept}</span> &nbsp;<b style="color:${s.sep==="Cres"?"var(--red-700)":"var(--green-700)"}">${s.sep}</b><div class="xs muted" style="margin-top:4px">Tier 1 and Tier 2 reasoning appear here in the live site.</div></div>
+   <table style="font-size:12px"><thead><tr><th style="background:none;color:var(--slate-500)">Position</th><th style="background:none;color:var(--slate-500)">Codon</th><th style="background:none;color:var(--slate-500)">Residue</th></tr></thead><tbody>${s.cod.map(c=>`<tr><td>${c[0]}</td><td class="mono">${c[1]}</td><td class="mono">${c[2]}</td></tr>`).join("")}</tbody></table>
+   <div class="xs muted">${s.pm}</div>
+   <label class="f"><span class="n">Curator notes</span><textarea rows="3" placeholder="Required when rejecting"></textarea></label>
+   ${s.flags.length?'<label class="row" style="gap:8px;color:var(--amber-800)"><input type="checkbox" id="p-ack"> I have reviewed the flagged items and still approve.</label>':""}
+   <div class="row"><button class="btn ok" id="p-ok">Approve</button><button class="btn bad" id="p-no">Reject</button></div>
+   <p class="xs" id="p-msg" style="color:var(--green-700)"></p></div>`;
+  $("#panel").classList.remove("hidden"); $("#scrim").classList.remove("hidden");
+  $("#p-close").addEventListener("click",closePanel);
+  const msg=t=>{$("#p-msg").textContent=t;};
+  $("#p-ok").addEventListener("click",()=>{ const ack=$("#p-ack"); if(ack&&!ack.checked){$("#p-msg").style.color="var(--red-700)";return msg("Tick the confirmation box to approve a flagged submission.");} $("#p-msg").style.color="var(--green-700)"; msg("Demo only: in the live site this copies the record into the database."); });
+  $("#p-no").addEventListener("click",()=>{$("#p-msg").style.color="var(--green-700)";msg("Demo only: in the live site the submission is rejected and logged.");});
+}
+function closePanel(){ $("#panel").classList.add("hidden"); $("#scrim").classList.add("hidden"); }
+$("#scrim").addEventListener("click",closePanel);
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closePanel(); });
+
+/* ---------------- theory: scenario explorer (schematic) ---------------- */
+const KIND={intact:["Native interaction kept","#2e9e6b"],lost:["Hydroxyl H-bond lost","#c0392b"],neut:["Negative charge lost","#e67e22"],rev:["Charge reversed (positive)","#7b3fa0"],ctx:["Kept, but its environment changed","#d4a017"]};
+const SCEN=[
+ {id:"sdse",btn:"Show Susceptible S-D-S-E",res:false,title:"Susceptible state: S-D-S-E",sum:"The hydroxyl groups of Ser83 (GyrA) and Ser80 (ParC), together with the negative charges of Asp87 (GyrA) and Glu84 (ParC), maintain the local electrostatic environment around the drug-bound Mg²⁺.",bridge:[true,"The water-metal ion bridge forms. Mg²⁺ is held in octahedral coordination by four waters, whose hydrogen bonds to the helix residues anchor the ciprofloxacin-Mg²⁺ complex, so the drug binds."],
+  eff:[["GyrA-83","Ser","Ser","intact","Hydroxyl available for water-mediated hydrogen bonding."],["GyrA-87","Asp","Asp","intact","Negative charge supports the electrostatic environment."],["ParC-80","Ser","Ser","intact","Hydroxyl available for water-mediated hydrogen bonding."],["ParC-84","Glu","Glu","intact","Negative charge next to a polar Ser80 keeps the bridge environment (the S-E state)."]]},
+ {id:"inie",btn:"Show Resistant I-N-I-E",res:true,title:"Hydrophobic disruption: I-N-I-E",sum:"Ser83 and Ser80 are replaced by hydrophobic Ile, removing native hydrogen bonding. Asp87 becomes neutral Asn. Glu84 stays, but now sits beside a hydrophobic Ile80 (the I-E state).",bridge:[false,"Hydroxyl hydrogen bonds are lost at both enzymes and the negative charge at GyrA-87 is gone, so the water-metal ion bridge cannot form as in the susceptible state and drug binding is prevented."],
+  eff:[["GyrA-83","Ser","Ile","lost","Ser to Ile removes the hydroxyl and adds hydrophobicity."],["GyrA-87","Asp","Asn","neut","Asp to Asn leaves a polar but uncharged side chain."],["ParC-80","Ser","Ile","lost","Ser to Ile removes the hydroxyl involved in water-mediated interactions."],["ParC-84","Glu","Glu","ctx","Glu is kept, but beside a hydrophobic residue it no longer works as in S-E."]]},
+ {id:"fnsk",btn:"Show Resistant F-N-S-K",res:true,title:"Electrostatic reversal: F-N-S-K",sum:"Replacing Glu84 with Lys84 introduces a positive charge and reverses the local electrostatic environment around Mg²⁺. ParC Ser80 is kept, so hydrogen-bonding capacity is retained there.",bridge:[false,"The charge reversal at ParC-84 alters the charge distribution around the Mg²⁺ ion that the water-metal ion bridge relies on, disrupting the coordination the drug-target complex needs."],
+  eff:[["GyrA-83","Ser","Phe","lost","Ser to Phe removes the hydroxyl and adds hydrophobicity."],["GyrA-87","Asp","Asn","neut","Asp to Asn leaves a polar but uncharged side chain."],["ParC-80","Ser","Ser","intact","Hydroxyl retained, so hydrogen bonding capacity is preserved."],["ParC-84","Glu","Lys","rev","Glu to Lys turns a negative charge into a positive one."]]}
+];
+let scen=SCEN[0];
+function schematic(s){
+  // Mg2+ in the middle, four residues around it; solid line = bridge intact, dashed = disrupted
+  const pos=[[110,70],[330,70],[110,250],[330,250]]; const ok=s.bridge[0];
+  const lines=s.eff.map((e,i)=>{const [x,y]=pos[i];const intact=e.kind===undefined?false:null;const k=e[3];const good=k==="intact";
+    return `<line x1="220" y1="160" x2="${x}" y2="${y}" stroke="${good?"#2e9e6b":"#c0392b"}" stroke-width="${good?3:2}" ${good?"":'stroke-dasharray="6 6"'} opacity="${good?.9:.7}"/>`}).join("");
+  const nodes=s.eff.map((e,i)=>{const [x,y]=pos[i];const c=KIND[e[3]][1];
+    return `<g><circle cx="${x}" cy="${y}" r="34" fill="${c}" opacity=".92"/><text x="${x}" y="${y-3}" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">${e[0]}</text><text x="${x}" y="${y+13}" text-anchor="middle" font-size="12" fill="#fff">${e[1]}→${e[2]}</text></g>`}).join("");
+  return `<svg viewBox="0 0 440 320" style="width:100%;max-height:360px" role="img" aria-label="Schematic of the Mg2+ water bridge for ${s.title}">
+   <text x="220" y="20" text-anchor="middle" font-size="12" fill="#64748b">Schematic (the live site shows the Mol* 3D structure)</text>${lines}${nodes}
+   <circle cx="220" cy="160" r="30" fill="${ok?"#2e9e6b":"#94a3b8"}" opacity=".95"/><text x="220" y="165" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">Mg²⁺</text>
+   <text x="220" y="306" text-anchor="middle" font-size="12" font-weight="600" fill="${ok?"#047857":"#b91c1c"}">Water-metal ion bridge: ${ok?"intact":"disrupted"}</text></svg>`;
+}
+function renderScen(){
+  $("#scen-btns").innerHTML=SCEN.map(s=>`<button class="btn" data-id="${s.id}" aria-pressed="${s===scen}" style="${s===scen?(s.res?"background:#b91c1c;border-color:#b91c1c;color:#fff":"background:#047857;border-color:#047857;color:#fff"):""}">${s.btn}</button>`).join("");
+  $$("#scen-btns button").forEach(b=>b.addEventListener("click",()=>{scen=SCEN.find(x=>x.id===b.dataset.id);renderScen();}));
+  $("#scen-svg").innerHTML=schematic(scen);
+  $("#scen-legend").innerHTML=Object.values(KIND).map(k=>`<span style="--c:${k[1]}">${k[0]}</span>`).join("");
+  $("#scen-panel").innerHTML=`<div class="row" style="gap:8px"><h3 class="sub">${scen.title}</h3><span class="badge ${scen.res?"b-r":"b-s"}">${scen.res?"Cres":"Csus"}</span></div><p class="muted">${scen.sum}</p>
+   <div class="bridge ${scen.bridge[0]?"ok":"no"}"><b class="xs" style="text-transform:uppercase;letter-spacing:.05em;color:${scen.bridge[0]?"#065f46":"#7f1d1d"}">Water-metal ion bridge: ${scen.bridge[0]?"intact":"disrupted"}</b><p class="muted" style="margin-top:3px">${scen.bridge[1]}</p></div>
+   ${scen.eff.map(e=>`<div class="eff"><div class="row" style="gap:8px"><span class="dot" style="background:${KIND[e[3]][1]};margin:0"></span><b>${e[0]}</b><span class="mono xs faint">${e[1]} → ${e[2]}</span><span class="xs faint" style="margin-left:auto">${KIND[e[3]][0]}</span></div><div class="muted" style="margin-top:3px">${e[4]}</div></div>`).join("")}`;
+}
+$("#sp-bars").innerHTML=[["E. coli",96.0,"n=1,3xx"],["S. sonnei",98.5,"n=334"],["S. enterica",99.2,""],["K. pneumoniae",96.6,""]].map(([n,v])=>`<div class="bar" style="grid-template-columns:120px 1fr 52px"><span><i>${n}</i></span><span class="t"><i style="width:${v}%;background:#1e40af"></i></span><b>${v.toFixed(1)}%</b></div>`).join("");
+
+/* ---------------- init ---------------- */
+renderBrowse(); renderCurator(); renderScen();
+show(location.hash.slice(1)||"browse");
+})();
+</script>
+</body>
+</html>
