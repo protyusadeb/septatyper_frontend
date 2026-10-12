@@ -1,0 +1,48 @@
+{
+  "source": "Table S1, 2,734 isolates with laboratory ciprofloxacin phenotype",
+  "generated": "2026-10-11",
+  "n_isolates": 2734,
+  "concordance": 0.9726,
+  "sensitivity": 0.9892,
+  "specificity": 0.9465,
+  "confusion": {
+    "tp": 1651,
+    "tn": 1008,
+    "fp": 57,
+    "fn": 18
+  },
+  "by_species": [
+    {
+      "species": "Escherichia coli",
+      "n": 400,
+      "concordance": 0.96
+    },
+    {
+      "species": "Klebsiella pneumoniae",
+      "n": 1490,
+      "concordance": 0.9664
+    },
+    {
+      "species": "Salmonella enterica subspecies I",
+      "n": 510,
+      "concordance": 0.9922
+    },
+    {
+      "species": "Shigella sonnei",
+      "n": 334,
+      "concordance": 0.985
+    }
+  ],
+  "qnr_override": {
+    "applied": 232,
+    "lab_resistant": 184,
+    "lab_susceptible": 48,
+    "lab_susceptible_by_species": {
+      "Escherichia coli": 10,
+      "Klebsiella pneumoniae": 35,
+      "Salmonella enterica subspecies I": 3,
+      "Shigella sonnei": 0
+    }
+  },
+  "not_scored": "S. enterica F-D-S-E with RecN codon ctg (Table S1 has no codon data)"
+}
